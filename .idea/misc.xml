@@ -4,7 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_game_board.xml" value="0.24716796875000002" />
+        <entry key="app/src/main/res/layout/activity_game_score.xml" value="0.21960754394531262" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2160994107479261" />
+        <entry key="app/src/main/res/layout/fragment_item.xml" value="0.1693840579710145" />
+        <entry key="app/src/main/res/layout/fragment_item_list.xml" value="0.23751678466796877" />
       </map>
     </option>
   </component>
@@ -13,5 +16,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.21960754394531262" />
+      </ProjectState>
+    </option>
   </component>
 </project>
