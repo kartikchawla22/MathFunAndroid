@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ContentInfoCompat;
 
 import net.kartikchawla.mathsfun.models.GameModel;
 import net.kartikchawla.mathsfun.models.RandomOptionsModel;

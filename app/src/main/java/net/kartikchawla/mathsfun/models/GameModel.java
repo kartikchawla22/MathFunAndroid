@@ -60,4 +60,11 @@ public class GameModel {
                 return randomSecondNumber;
         }
     }
+    public void reset() {
+        randomFirstNumber = 0;
+         randomSecondNumber = 0;
+         randomOperation = "";
+         question = "";
+         selectedMode = "";
+    }
 }
