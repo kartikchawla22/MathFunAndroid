@@ -1,6 +1,5 @@
 package net.kartikchawla.mathsfun;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.ContentInfoCompat;
 
 import net.kartikchawla.mathsfun.models.GameModel;
 import net.kartikchawla.mathsfun.models.RandomOptionsModel;
@@ -25,13 +23,12 @@ public class GameBoard extends AppCompatActivity {
     private final RadioButton[] option = new RadioButton[4];
     private TextView timer;
     private AlertDialog.Builder gameOverDialog;
-    private View view;
     public CountDownTimer countDownTimer = new CountDownTimer(3000, 1000) {
         @Override
         public void onTick(long l) {
             long second = (l / 1000) % 60;
-            long minutes = (l/(1000*60)) % 60;
-            if(String.valueOf(second).length() == 1) {
+            long minutes = (l / (1000 * 60)) % 60;
+            if (String.valueOf(second).length() == 1) {
                 timer.setText(minutes + ":0" + second);
             } else {
                 timer.setText(minutes + ":" + second);
@@ -51,18 +48,20 @@ public class GameBoard extends AppCompatActivity {
             alert.show();
         }
     };
+    private View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_board);
         setTitle(gameModel.getSelectedMode() + " Game");
-        timer =  (TextView) findViewById(R.id.timer);
+        timer = (TextView) findViewById(R.id.timer);
         gameOverDialog = new AlertDialog.Builder(this);
 
         countDownTimer.start();
         setNewQuestion();
     }
+
     private void goToHighScoreList() {
         Intent gameScoreIntent = new Intent(this, GameScore.class);
         startActivity(gameScoreIntent);
