@@ -21,6 +21,8 @@ public class ScoreRecyclerViewAdapter extends RecyclerView.Adapter<ScoreRecycler
     private final List<PlaceholderItem> mValues;
 
     public ScoreRecyclerViewAdapter(List<PlaceholderItem> items) {
+        System.out.println("items");
+        System.out.println(items);
         mValues = items;
     }
 
@@ -34,8 +36,12 @@ public class ScoreRecyclerViewAdapter extends RecyclerView.Adapter<ScoreRecycler
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        System.out.println("mValues.get(position).score");
+        System.out.println(mValues.get(position).score.toString());
+        System.out.println(position);
+        holder.mIdView.setText((position + 1) + "");
+        holder.mScoreView.setText(mValues.get(position).score.toString());
+        holder.mDateTimeView.setText(mValues.get(position).timeStamp);
     }
 
     @Override
@@ -45,18 +51,23 @@ public class ScoreRecyclerViewAdapter extends RecyclerView.Adapter<ScoreRecycler
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mIdView;
-        public final TextView mContentView;
+        public final TextView mScoreView;
+        public final TextView mDateTimeView;
         public PlaceholderItem mItem;
 
         public ViewHolder(FragmentItemBinding binding) {
             super(binding.getRoot());
+            System.out.println("binding");
+            System.out.println(binding);
+            System.out.println(binding.gameScore);
             mIdView = binding.itemNumber;
-            mContentView = binding.content;
+            mDateTimeView = binding.dateTime;
+            mScoreView = binding.gameScore;
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mIdView.getText() + "'";
         }
     }
 }

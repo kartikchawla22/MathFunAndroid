@@ -12,18 +12,23 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import net.kartikchawla.mathsfun.models.DataModel;
 import net.kartikchawla.mathsfun.models.GameModel;
 import net.kartikchawla.mathsfun.models.RandomOptionsModel;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class GameBoard extends AppCompatActivity {
     private final GameModel gameModel = GameModel.getInstance();
     private final RandomOptionsModel randomOptionsModel = new RandomOptionsModel();
     private final RadioButton[] option = new RadioButton[4];
+    private Integer totalScore = -1;
     private TextView timer;
     private AlertDialog.Builder gameOverDialog;
-    public CountDownTimer countDownTimer = new CountDownTimer(3000, 1000) {
+    private DataModel dataModel = new DataModel();
+    public CountDownTimer countDownTimer = new CountDownTimer(30000, 1000) {
         @Override
         public void onTick(long l) {
             long second = (l / 1000) % 60;
@@ -37,15 +42,8 @@ public class GameBoard extends AppCompatActivity {
 
         @Override
         public void onFinish() {
-            gameOverDialog.setMessage("Congratulations!")
-                    .setCancelable(false)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            goToHighScoreList();
-                        }
-                    });
-            AlertDialog alert = gameOverDialog.create();
-            alert.show();
+            endGame();
+            showMessage("Congratulations!");
         }
     };
     private View view;
@@ -68,6 +66,7 @@ public class GameBoard extends AppCompatActivity {
     }
 
     private void setNewQuestion() {
+        totalScore++;
         gameModel.generateRandomQuestion();
         String newQuestion = gameModel.question;
         TextView question = (TextView) findViewById(R.id.question);
@@ -116,7 +115,27 @@ public class GameBoard extends AppCompatActivity {
         if (selectedAnswer == gameModel.getResult().toString()) {
             setNewQuestion();
         } else {
-            System.out.println("answer is Incorrect");
+            showMessage("OOPS! Wrong Answer");
+            endGame();
         }
+    }
+    private void showMessage(String message) {
+        gameOverDialog.setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        goToHighScoreList();
+                    }
+                });
+        AlertDialog alert = gameOverDialog.create();
+        alert.show();
+    }
+    private void endGame() {
+        String dateTime = DateFormat.getDateInstance(DateFormat.SHORT).format(new java.util.Date()).toString();
+
+        System.out.println("dateTime");
+        System.out.println(this.getSharedPreferences("MathsFun", MODE_PRIVATE));
+
+        dataModel.saveGameScore(this.getSharedPreferences("MathsFun", MODE_PRIVATE), totalScore, dateTime);
     }
 }

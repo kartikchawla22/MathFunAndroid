@@ -1,5 +1,6 @@
 package net.kartikchawla.mathsfun;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -44,6 +45,9 @@ public class ScoreFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println(getActivity().getSharedPreferences("MathsFun", Context.MODE_PRIVATE));
+        PlaceholderContent.loadPastGameData(getActivity().getSharedPreferences("MathsFun", Context.MODE_PRIVATE));
+
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
