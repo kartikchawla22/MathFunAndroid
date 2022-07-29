@@ -38,6 +38,7 @@ public class GameBoard extends AppCompatActivity {
             } else {
                 timer.setText(minutes + ":" + second);
             }
+            dataModel.SaveCurrentState(getSharedPreferences("savegame",MODE_PRIVATE),totalScore,l,gameModel.getSelectedMode());
         }
 
         @Override

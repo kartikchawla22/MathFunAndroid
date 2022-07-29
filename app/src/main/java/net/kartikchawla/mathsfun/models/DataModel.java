@@ -15,10 +15,31 @@ public class DataModel {
     private Integer getTotalGames(SharedPreferences sharedPrefs) {
         return sharedPrefs.getInt( gameModel.getSelectedMode() + "-" + Constants.TOTAL_GAMES_PLAYED, 0);
     }
-
     public static class Constants {
         public static final String TOTAL_GAMES_PLAYED = "TotalGamesPlayed";
         public static final String SCORE = "Score";
         public static final String DATE_TIME = "DateTime";
+        public static final String CURRENT_GAME_MODE="CurrntGameMode";
+        public static final String CURRENT_GAME_REMANING_TIME="RemaningTime";
+        public static final String CURRENT_SCORE ="CurrentScore";
     }
+    public void SaveCurrentState(SharedPreferences sp,Integer score,Long time, String mode){
+
+        SharedPreferences.Editor editor=sp.edit();
+        editor.putInt(Constants.CURRENT_SCORE,score);
+        editor.putLong(Constants.CURRENT_GAME_REMANING_TIME,time);
+        editor.putString(Constants.CURRENT_GAME_MODE,mode);
+        editor.apply();
+
+    }
+    public Boolean isgamesaved(SharedPreferences sp){
+        Integer score = sp.getInt(Constants.CURRENT_SCORE,-1);
+        Long time = sp.getLong(Constants.CURRENT_GAME_REMANING_TIME,-1);
+        String mode =sp.getString(Constants.CURRENT_GAME_MODE,"");
+        return score>-1 && time>-1 && mode.length()>0;
+    }
+
+
+
+
 }
