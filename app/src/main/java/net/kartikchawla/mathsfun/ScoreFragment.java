@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import net.kartikchawla.mathsfun.models.DataModel;
 import net.kartikchawla.mathsfun.placeholder.PlaceholderContent;
 
 /**
@@ -45,8 +46,7 @@ public class ScoreFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println(getActivity().getSharedPreferences("MathsFun", Context.MODE_PRIVATE));
-        PlaceholderContent.loadPastGameData(getActivity().getSharedPreferences("MathsFun", Context.MODE_PRIVATE));
+        PlaceholderContent.loadPastGameData(getActivity().getSharedPreferences(DataModel.Constants.PAST_GAMES_FILE, Context.MODE_PRIVATE));
 
 
         if (getArguments() != null) {
