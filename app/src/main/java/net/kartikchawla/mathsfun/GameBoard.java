@@ -2,6 +2,7 @@ package net.kartikchawla.mathsfun;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -17,7 +18,6 @@ import net.kartikchawla.mathsfun.models.GameModel;
 import net.kartikchawla.mathsfun.models.RandomOptionsModel;
 
 import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class GameBoard extends AppCompatActivity {
@@ -27,38 +27,23 @@ public class GameBoard extends AppCompatActivity {
     private Integer totalScore = -1;
     private TextView timer;
     private AlertDialog.Builder gameOverDialog;
-    private DataModel dataModel = new DataModel();
-    public CountDownTimer countDownTimer = new CountDownTimer(30000, 1000) {
-        @Override
-        public void onTick(long l) {
-            long second = (l / 1000) % 60;
-            long minutes = (l / (1000 * 60)) % 60;
-            if (String.valueOf(second).length() == 1) {
-                timer.setText(minutes + ":0" + second);
-            } else {
-                timer.setText(minutes + ":" + second);
-            }
-            dataModel.SaveCurrentState(getSharedPreferences("savegame",MODE_PRIVATE),totalScore,l,gameModel.getSelectedMode());
-        }
-
-        @Override
-        public void onFinish() {
-            endGame();
-            showMessage("Congratulations!");
-        }
-    };
+    private final DataModel dataModel = new DataModel();
+    private Long countDownTimerMilliSeconds = new Long(30000);
+    private Long remainingTime = new Long(0);
+    public CountDownTimer countDownTimer;
     private View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_board);
-        setTitle(gameModel.getSelectedMode() + " Game");
         timer = (TextView) findViewById(R.id.timer);
         gameOverDialog = new AlertDialog.Builder(this);
-
-        countDownTimer.start();
-        setNewQuestion();
+    }
+    @Override
+    protected void onDestroy() {
+        countDownTimer.cancel();
+        super.onDestroy();
     }
 
     private void goToHighScoreList() {
@@ -116,10 +101,11 @@ public class GameBoard extends AppCompatActivity {
         if (selectedAnswer == gameModel.getResult().toString()) {
             setNewQuestion();
         } else {
-            showMessage("OOPS! Wrong Answer");
             endGame();
+            showMessage("OOPS! Wrong Answer");
         }
     }
+
     private void showMessage(String message) {
         gameOverDialog.setMessage(message)
                 .setCancelable(false)
@@ -131,12 +117,57 @@ public class GameBoard extends AppCompatActivity {
         AlertDialog alert = gameOverDialog.create();
         alert.show();
     }
+
     private void endGame() {
-        String dateTime = DateFormat.getDateInstance(DateFormat.SHORT).format(new java.util.Date()).toString();
+         SharedPreferences.Editor editor =  getSharedPreferences(DataModel.Constants.SAVE_GAME_FILE, MODE_PRIVATE).edit();
+         editor.clear();
+         editor.commit();
+        countDownTimer.cancel();
+         gameModel.reset();
+        String dateTime = DateFormat.getDateInstance(DateFormat.SHORT).format(new java.util.Date());
+        dataModel.saveGameScore(this.getSharedPreferences(DataModel.Constants.PAST_GAMES_FILE, MODE_PRIVATE), totalScore, dateTime);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Boolean isGameSaved = getIntent().getBooleanExtra("isGameSaved", false);
+        if(isGameSaved) {
+            SharedPreferences sp = getSharedPreferences(DataModel.Constants.SAVE_GAME_FILE, MODE_PRIVATE);
+            String mode = sp.getString(DataModel.Constants.CURRENT_GAME_MODE, "");
+            int score =  sp.getInt(DataModel.Constants.CURRENT_SCORE, -1);
+            Long t = sp.getLong(DataModel.Constants.CURRENT_GAME_REMAINING_TIME, -1);
+            System.out.println(mode);
+            System.out.println(score);
+            System.out.println("here in on create");
+            System.out.println(t);
+            gameModel.setSelectedMode(mode);
+            totalScore = score;
+            countDownTimerMilliSeconds = t;
+        }
+        setTitle(gameModel.getSelectedMode() + " Game");
+        countDownTimer = new CountDownTimer(countDownTimerMilliSeconds, 1000) {
+            @Override
+            public void onTick(long l) {
+                System.out.println("hrererere");
+                System.out.println(countDownTimerMilliSeconds);
+                long second = (l / 1000) % 60;
+                long minutes = (l / (1000 * 60)) % 60;
+                if (String.valueOf(second).length() == 1) {
+                    timer.setText(minutes + ":0" + second);
+                } else {
+                    timer.setText(minutes + ":" + second);
+                }
+                remainingTime = l;
+                dataModel.SaveCurrentState(getSharedPreferences(DataModel.Constants.SAVE_GAME_FILE, MODE_PRIVATE), totalScore, remainingTime, gameModel.getSelectedMode());
+            }
 
-        System.out.println("dateTime");
-        System.out.println(this.getSharedPreferences("MathsFun", MODE_PRIVATE));
-
-        dataModel.saveGameScore(this.getSharedPreferences("MathsFun", MODE_PRIVATE), totalScore, dateTime);
+            @Override
+            public void onFinish() {
+                endGame();
+                showMessage("Congratulations!");
+            }
+        };
+        countDownTimer.start();
+        setNewQuestion();
     }
 }
