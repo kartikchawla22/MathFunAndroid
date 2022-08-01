@@ -5,12 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -18,15 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import net.kartikchawla.mathsfun.models.DataModel;
 import net.kartikchawla.mathsfun.models.GameModel;
-import net.kartikchawla.mathsfun.models.RandomOptionsModel;
 
 import java.text.DateFormat;
-import java.util.List;
 
-public class GameBoard extends AppCompatActivity {
+public class GameBoardHard extends AppCompatActivity {
     private final GameModel gameModel = GameModel.getInstance();
-    private final RandomOptionsModel randomOptionsModel = new RandomOptionsModel();
-    private final RadioButton[] option = new RadioButton[4];
     private final DataModel dataModel = new DataModel();
     public CountDownTimer countDownTimer;
     private Integer totalScore = -1;
@@ -38,8 +28,8 @@ public class GameBoard extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_board);
-        timer = (TextView) findViewById(R.id.timer);
+        setContentView(R.layout.activity_game_board_hard);
+        timer = (TextView) findViewById(R.id.hardModeTimer);
         gameOverDialog = new AlertDialog.Builder(this);
     }
 
@@ -58,55 +48,21 @@ public class GameBoard extends AppCompatActivity {
         totalScore++;
         gameModel.generateRandomQuestion();
         String newQuestion = gameModel.question;
-        TextView question = (TextView) findViewById(R.id.question);
+        TextView question = (TextView) findViewById(R.id.hardModeQuestion);
+        TextView answerTextView = (TextView) findViewById(R.id.answerTextView);
+        answerTextView.clearFocus();
+        answerTextView.setText("");
         question.setText(newQuestion);
-        setRandomOptions();
     }
 
-    private void setRandomOptions() {
-        generateOptions();
-        randomizeArrangeOptions();
-    }
-
-    private void generateOptions() {
-        List<Integer> randomOptions = randomOptionsModel.generateRandomOptions();
-        randomOptions.add(gameModel.getResult());
-        for (int i = 0; i < 4; i++) {
-            option[i] = new RadioButton(this);
-            option[i].setId(View.generateViewId());
-            option[i].setText(randomOptions.get(i).toString());
-            option[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-            option[i].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    checkAnswer(((RadioButton) view).getText().toString());
-                }
-            });
+    public void checkAnswer(android.view.View view) {
+        String answer = ((TextView) findViewById(R.id.answerTextView)).getText().toString();
+        if (answer == "") {
+            return;
         }
-    }
-
-    private void randomizeArrangeOptions() {
-        RadioGroup optionsGroup = (RadioGroup) findViewById(R.id.randomOutputs);
-        optionsGroup.removeAllViews();
-        optionsGroup.setOrientation(LinearLayout.VERTICAL);
-        for (int i = 0; i < 4; i++) {
-            int swap_ind1 = ((int) (Math.random() * 10) % 4);
-            int swap_ind2 = ((int) (Math.random() * 10) % 4);
-            RadioButton temp = option[swap_ind1];
-            option[swap_ind1] = option[swap_ind2];
-            option[swap_ind2] = temp;
-        }
-        for (int i = 0; i < option.length; i++) {
-            option[i].setGravity(Gravity.CENTER);
-            option[i].setEms(5);
-            option[i].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            option[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
-            optionsGroup.addView(option[i]);
-        }
-    }
-
-    private void checkAnswer(String selectedAnswer) {
-        if (selectedAnswer == gameModel.getResult().toString()) {
+        System.out.println(answer);
+        System.out.println(gameModel.getResult().toString());
+        if (answer.equals(gameModel.getResult().toString())) {
             setNewQuestion();
         } else {
             endGame();

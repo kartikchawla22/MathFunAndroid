@@ -1,14 +1,13 @@
 package net.kartikchawla.mathsfun;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import net.kartikchawla.mathsfun.placeholder.PlaceholderContent.PlaceholderItem;
+import androidx.recyclerview.widget.RecyclerView;
+
 import net.kartikchawla.mathsfun.databinding.FragmentItemBinding;
+import net.kartikchawla.mathsfun.ScoreList.ScoreListContent.PlaceholderItem;
 
 import java.util.List;
 
@@ -21,8 +20,6 @@ public class ScoreRecyclerViewAdapter extends RecyclerView.Adapter<ScoreRecycler
     private final List<PlaceholderItem> mValues;
 
     public ScoreRecyclerViewAdapter(List<PlaceholderItem> items) {
-        System.out.println("items");
-        System.out.println(items);
         mValues = items;
     }
 
@@ -36,9 +33,6 @@ public class ScoreRecyclerViewAdapter extends RecyclerView.Adapter<ScoreRecycler
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        System.out.println("mValues.get(position).score");
-        System.out.println(mValues.get(position).score.toString());
-        System.out.println(position);
         holder.mIdView.setText((position + 1) + "");
         holder.mScoreView.setText(mValues.get(position).score.toString());
         holder.mDateTimeView.setText(mValues.get(position).timeStamp);
@@ -57,9 +51,6 @@ public class ScoreRecyclerViewAdapter extends RecyclerView.Adapter<ScoreRecycler
 
         public ViewHolder(FragmentItemBinding binding) {
             super(binding.getRoot());
-            System.out.println("binding");
-            System.out.println(binding);
-            System.out.println(binding.gameScore);
             mIdView = binding.itemNumber;
             mDateTimeView = binding.dateTime;
             mScoreView = binding.gameScore;

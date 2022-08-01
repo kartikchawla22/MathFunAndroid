@@ -15,6 +15,7 @@ public class GameModel {
     public String randomOperation = "";
     public String question = "";
     private String selectedMode = "";
+    private Integer bound = 9;
 
     public static GameModel getInstance() {
         if (gameModelObject == null) {
@@ -34,13 +35,19 @@ public class GameModel {
     public String generateRandomQuestion() {
         Random r = new Random();
         randomOperation = operations[r.nextInt(3)];
-        randomFirstNumber = r.nextInt(9) + 1;
-        randomSecondNumber = r.nextInt(9) + 1;
+
+        if(getSelectedMode().equals("Hard")) {
+    bound = 99;
+        } else {
+           bound = 9;
+        }
+        randomFirstNumber = r.nextInt(bound) + 1;
+        randomSecondNumber = r.nextInt(bound) + 1;
         if (randomFirstNumber == randomSecondNumber) {
-            randomSecondNumber = r.nextInt(9) + 1;
+            randomSecondNumber = r.nextInt(bound) + 1;
         }
         if (randomOperation == "/") {
-            randomFirstNumber = (r.nextInt(5) + 1) * randomSecondNumber;
+            randomFirstNumber = (r.nextInt(20) + 1) * randomSecondNumber;
         }
         question = String.format("%d %s %d = ?", randomFirstNumber, randomOperation, randomSecondNumber);
         return question;
@@ -60,12 +67,13 @@ public class GameModel {
                 return randomSecondNumber;
         }
     }
+
     public void reset() {
         randomFirstNumber = 0;
-         randomSecondNumber = 0;
-         randomOperation = "";
-         question = "";
-         selectedMode = "";
+        randomSecondNumber = 0;
+        randomOperation = "";
+        question = "";
+        selectedMode = "";
     }
 
 }

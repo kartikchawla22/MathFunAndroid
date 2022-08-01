@@ -1,20 +1,18 @@
 package net.kartikchawla.mathsfun;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import net.kartikchawla.mathsfun.models.DataModel;
-import net.kartikchawla.mathsfun.placeholder.PlaceholderContent;
+import net.kartikchawla.mathsfun.ScoreList.ScoreListContent;
 
 /**
  * A fragment representing a list of Items.
@@ -46,7 +44,7 @@ public class ScoreFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PlaceholderContent.loadPastGameData(getActivity().getSharedPreferences(DataModel.Constants.PAST_GAMES_FILE, Context.MODE_PRIVATE));
+        ScoreListContent.loadPastGameData(getActivity().getSharedPreferences(DataModel.Constants.PAST_GAMES_FILE, Context.MODE_PRIVATE));
 
 
         if (getArguments() != null) {
@@ -68,7 +66,7 @@ public class ScoreFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new ScoreRecyclerViewAdapter(PlaceholderContent.ITEMS));
+            recyclerView.setAdapter(new ScoreRecyclerViewAdapter(ScoreListContent.ITEMS));
         }
         return view;
     }
