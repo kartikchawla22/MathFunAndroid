@@ -36,10 +36,10 @@ public class GameModel {
         Random r = new Random();
         randomOperation = operations[r.nextInt(3)];
 
-        if(getSelectedMode().equals("Hard")) {
-    bound = 99;
+        if (getSelectedMode().equals("Hard")) {
+            bound = 99;
         } else {
-           bound = 9;
+            bound = 9;
         }
         randomFirstNumber = r.nextInt(bound) + 1;
         randomSecondNumber = r.nextInt(bound) + 1;

@@ -6,8 +6,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.kartikchawla.mathsfun.databinding.FragmentItemBinding;
 import net.kartikchawla.mathsfun.ScoreList.ScoreListContent.PlaceholderItem;
+import net.kartikchawla.mathsfun.databinding.FragmentItemBinding;
 
 import java.util.List;
 

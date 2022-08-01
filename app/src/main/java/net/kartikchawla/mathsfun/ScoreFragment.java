@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.kartikchawla.mathsfun.models.DataModel;
 import net.kartikchawla.mathsfun.ScoreList.ScoreListContent;
+import net.kartikchawla.mathsfun.models.DataModel;
 
 /**
  * A fragment representing a list of Items.

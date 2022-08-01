@@ -60,8 +60,6 @@ public class GameBoardHard extends AppCompatActivity {
         if (answer == "") {
             return;
         }
-        System.out.println(answer);
-        System.out.println(gameModel.getResult().toString());
         if (answer.equals(gameModel.getResult().toString())) {
             setNewQuestion();
         } else {

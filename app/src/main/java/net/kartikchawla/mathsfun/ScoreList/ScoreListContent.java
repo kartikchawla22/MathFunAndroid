@@ -15,11 +15,11 @@ import java.util.List;
  * TODO: Replace all uses of this class before publishing your app.
  */
 public class ScoreListContent {
+    private static final GameModel gameModel = GameModel.getInstance();
     /**
      * An array of sample (placeholder) items.
      */
     public static List<PlaceholderItem> ITEMS = new ArrayList<PlaceholderItem>();
-    private static final GameModel gameModel = GameModel.getInstance();
     private static int COUNT = 0;
 
     private static void addItem(PlaceholderItem item) {

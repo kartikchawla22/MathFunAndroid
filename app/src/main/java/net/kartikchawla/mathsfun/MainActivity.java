@@ -32,9 +32,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int whichMode) {
                 gameModel.setSelectedMode(gameModel.gameModes[whichMode]);
-                System.out.println(gameModel.getSelectedMode());
                 if (route == "GameBoard") {
-                    System.out.println(whichMode);
                     if (gameModel.getSelectedMode().equals("Hard")) {
                         Intent hardGameBoardIntent = new Intent(view.getContext(), GameBoardHard.class);
                         startActivity(hardGameBoardIntent);
@@ -58,10 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void onContinueGame(android.view.View view) {
         Intent continueGameIntent;
-        System.out.println("inside continue");
-        System.out.println(gameModel.getSelectedMode());
-        System.out.println("inside continue2");
-        System.out.println(gameModel.getSelectedMode().equals("Hard"));
         if (gameModel.getSelectedMode().equals("Hard")) {
             continueGameIntent = new Intent(MainActivity.this, GameBoardHard.class);
         } else {
