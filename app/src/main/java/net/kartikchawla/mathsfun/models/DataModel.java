@@ -19,7 +19,6 @@ public class DataModel {
     }
 
     public void SaveCurrentState(SharedPreferences sp, Integer score, Long time, String mode) {
-System.out.println(time);
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt(Constants.CURRENT_SCORE, score);
         editor.putLong(Constants.CURRENT_GAME_REMAINING_TIME, time);

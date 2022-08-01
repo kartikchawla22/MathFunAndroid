@@ -2,6 +2,7 @@ package net.kartikchawla.mathsfun;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -31,9 +32,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int whichMode) {
                 gameModel.setSelectedMode(gameModel.gameModes[whichMode]);
+                System.out.println(gameModel.getSelectedMode());
                 if (route == "GameBoard") {
-                    Intent gameBoardIntent = new Intent(view.getContext(), GameBoard.class);
-                    startActivity(gameBoardIntent);
+                    System.out.println(whichMode);
+                    if (gameModel.getSelectedMode().equals("Hard")) {
+                        Intent hardGameBoardIntent = new Intent(view.getContext(), GameBoardHard.class);
+                        startActivity(hardGameBoardIntent);
+                    } else {
+                        Intent gameBoardIntent = new Intent(view.getContext(), GameBoard.class);
+                        startActivity(gameBoardIntent);
+                    }
                 } else {
                     Intent gameScoreIntent = new Intent(view.getContext(), GameScore.class);
                     startActivity(gameScoreIntent);
@@ -49,9 +57,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onContinueGame(android.view.View view) {
-        Intent continueGame = new Intent(MainActivity.this, GameBoard.class);
-        continueGame.putExtra("isGameSaved", isGameSaved);
-        startActivity(continueGame);
+        Intent continueGameIntent;
+        System.out.println("inside continue");
+        System.out.println(gameModel.getSelectedMode());
+        System.out.println("inside continue2");
+        System.out.println(gameModel.getSelectedMode().equals("Hard"));
+        if (gameModel.getSelectedMode().equals("Hard")) {
+            continueGameIntent = new Intent(MainActivity.this, GameBoardHard.class);
+        } else {
+            continueGameIntent = new Intent(MainActivity.this, GameBoard.class);
+        }
+        continueGameIntent.putExtra("isGameSaved", isGameSaved);
+        startActivity(continueGameIntent);
     }
 
 
@@ -62,8 +79,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        gameModel.reset();
+        SharedPreferences sharedPreferences = getSharedPreferences(DataModel.Constants.SAVE_GAME_FILE, MODE_PRIVATE);
+        isGameSaved = dataModel.isGameSaved(sharedPreferences);
+        if (isGameSaved) {
+            String mode = sharedPreferences.getString(DataModel.Constants.CURRENT_GAME_MODE, "");
+            gameModel.setSelectedMode(mode);
+        }
         continueButton = findViewById(R.id.continubutton);
-        isGameSaved = dataModel.isGameSaved(getSharedPreferences(DataModel.Constants.SAVE_GAME_FILE, MODE_PRIVATE));
         continueButton.setVisibility(isGameSaved ? View.VISIBLE : View.INVISIBLE);
     }
 }
