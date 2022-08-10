@@ -18,11 +18,12 @@ import net.kartikchawla.mathsfun.models.DataModel;
  * A fragment representing a list of Items.
  */
 public class ScoreFragment extends Fragment {
+    /**
+     * Class variables
+     * mColumnCount is the default value of columns
+     */
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+    private final int mColumnCount = 1;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -31,26 +32,26 @@ public class ScoreFragment extends Fragment {
     public ScoreFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static ScoreFragment newInstance(int columnCount) {
-        ScoreFragment fragment = new ScoreFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    /**
+     * This method is called when this fragment is created in the memory.
+     * Here we load the past game data.
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ScoreListContent.loadPastGameData(getActivity().getSharedPreferences(DataModel.Constants.PAST_GAMES_FILE, Context.MODE_PRIVATE));
-
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
+
+    /**
+     * This method is called whenever view is created for this fragment.
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -8,46 +8,63 @@ import net.kartikchawla.mathsfun.models.GameModel;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Helper class for providing sample content for user interfaces created by
- * Android template wizards.
- * <p>
- * TODO: Replace all uses of this class before publishing your app.
- */
 public class ScoreListContent {
     private static final GameModel gameModel = GameModel.getInstance();
     /**
-     * An array of sample (placeholder) items.
+     * Class variables
+     * ITEMS is an array of type ScoreListItem
+     * Count is the total count of rows.
      */
-    public static List<PlaceholderItem> ITEMS = new ArrayList<PlaceholderItem>();
+
+    public static List<ScoreListItem> ITEMS = new ArrayList<ScoreListItem>();
     private static int COUNT = 0;
 
-    private static void addItem(PlaceholderItem item) {
+    /**
+     * Adds the item to ITEMS list
+     *
+     * @param item
+     */
+
+    private static void addItem(ScoreListItem item) {
         ITEMS.add(item);
     }
 
+    /**
+     * This method is used to load the past game data including score and datetime, according to the selected mode.
+     *
+     * @param sharedPrefs
+     */
 
-    public static void loadPastGameData(SharedPreferences sharefPrefs) {
+    public static void loadPastGameData(SharedPreferences sharedPrefs) {
+        // Clearing the ITEMS so that it will reset the data shown in fragment
         ITEMS.clear();
-        COUNT = sharefPrefs.getInt(gameModel.getSelectedMode() + "-" + DataModel.Constants.TOTAL_GAMES_PLAYED, 0);
+        COUNT = sharedPrefs.getInt(gameModel.getSelectedMode() + "-" + DataModel.Constants.TOTAL_GAMES_PLAYED, 0);
         for (int i = 0; i < COUNT; i++) {
-            Integer score = sharefPrefs.getInt(gameModel.getSelectedMode() + "-" + i + "-" + DataModel.Constants.SCORE, 0);
-            String dateTime = sharefPrefs.getString(gameModel.getSelectedMode() + "-" + i + "-" + DataModel.Constants.DATE_TIME, "");
-            PlaceholderItem item = new PlaceholderItem("Game" + gameModel.getSelectedMode() + "-" + i, score, dateTime);
+            Integer score = sharedPrefs.getInt(gameModel.getSelectedMode() + "-" + i + "-" + DataModel.Constants.SCORE, 0);
+            String dateTime = sharedPrefs.getString(gameModel.getSelectedMode() + "-" + i + "-" + DataModel.Constants.DATE_TIME, "");
+            ScoreListItem item = new ScoreListItem("Game" + gameModel.getSelectedMode() + "-" + i, score, dateTime);
             addItem(item);
         }
     }
 
 
     /**
-     * A placeholder item representing a piece of content.
+     * Class to format the data as a ScoreListItem.
      */
-    public static class PlaceholderItem {
+    public static class ScoreListItem {
         public final String id;
         public final Integer score;
         public final String timeStamp;
 
-        public PlaceholderItem(String id, Integer score, String timeStamp) {
+        /**
+         * sets the value of id, score and timestamp that needs to be displayed.
+         *
+         * @param id
+         * @param score
+         * @param timeStamp
+         */
+
+        public ScoreListItem(String id, Integer score, String timeStamp) {
             this.id = id;
             this.score = score;
             this.timeStamp = timeStamp;

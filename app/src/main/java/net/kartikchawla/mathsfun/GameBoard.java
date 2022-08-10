@@ -23,7 +23,25 @@ import net.kartikchawla.mathsfun.models.RandomOptionsModel;
 import java.text.DateFormat;
 import java.util.List;
 
+/**
+ * GameBoard activity is used for easy and medium mode.
+ */
 public class GameBoard extends AppCompatActivity {
+
+    /**
+     * Class Variables
+     * gameModel is an shared instance of GameModel class.
+     * randomOptionsModel is the instance of RandomOptionsModel Class.
+     * option is an array of dynamically generated radio buttons.
+     * dataModel is an object of DataModel Class.
+     * countDownTimer is the timer for a particular game.
+     * totalScore is the score of the user, -1 so that initial score can be calculated as 0.
+     * timer is the view in which we are showing the countDownTimer value.
+     * gameOverDialog is the dialogue that we show when the game is ended.
+     * countDownTimerMilliSeconds is the maximum milliseconds allotted to each game.
+     * remainingTime is the time remaining before the game automatically ends.
+     */
+
     private final GameModel gameModel = GameModel.getInstance();
     private final RandomOptionsModel randomOptionsModel = new RandomOptionsModel();
     private final RadioButton[] option = new RadioButton[4];
@@ -35,6 +53,12 @@ public class GameBoard extends AppCompatActivity {
     private Long countDownTimerMilliSeconds = new Long(30000);
     private Long remainingTime = new Long(0);
 
+    /**
+     * This method is used to initialize class variables.
+     *
+     * @param savedInstanceState
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,16 +67,28 @@ public class GameBoard extends AppCompatActivity {
         gameOverDialog = new AlertDialog.Builder(this);
     }
 
+    /**
+     * This method is called when this Activity finishes.
+     */
+
     @Override
     protected void onDestroy() {
         countDownTimer.cancel();
         super.onDestroy();
     }
 
+    /**
+     * This method is used to go to the score list Activity.
+     */
+
     private void goToHighScoreList() {
         Intent gameScoreIntent = new Intent(this, GameScore.class);
         startActivity(gameScoreIntent);
     }
+
+    /**
+     * This method sets the new question.
+     */
 
     private void setNewQuestion() {
         totalScore++;
@@ -63,10 +99,18 @@ public class GameBoard extends AppCompatActivity {
         setRandomOptions();
     }
 
+    /**
+     * This method sets the generates and sets the random options that can be selected by the user.
+     */
+
     private void setRandomOptions() {
         generateOptions();
         randomizeArrangeOptions();
     }
+
+    /**
+     * This method generates the random options to be displayed.
+     */
 
     private void generateOptions() {
         List<Integer> randomOptions = randomOptionsModel.generateRandomOptions();
@@ -84,6 +128,10 @@ public class GameBoard extends AppCompatActivity {
             });
         }
     }
+
+    /**
+     * This method randomizes the options that are shown to the user.
+     */
 
     private void randomizeArrangeOptions() {
         RadioGroup optionsGroup = (RadioGroup) findViewById(R.id.randomOutputs);
@@ -105,6 +153,12 @@ public class GameBoard extends AppCompatActivity {
         }
     }
 
+    /**
+     * This method checks if the answer selected by user is correct or not.
+     *
+     * @param selectedAnswer
+     */
+
     private void checkAnswer(String selectedAnswer) {
         if (selectedAnswer == gameModel.getResult().toString()) {
             setNewQuestion();
@@ -114,6 +168,11 @@ public class GameBoard extends AppCompatActivity {
         }
     }
 
+    /**
+     * This Method invokes the dialogue to show the game end message.
+     *
+     * @param message
+     */
     private void showMessage(String message) {
         gameOverDialog.setMessage(message)
                 .setCancelable(false)
@@ -126,6 +185,11 @@ public class GameBoard extends AppCompatActivity {
         alert.show();
     }
 
+    /**
+     * This Method handles the ending of a game.
+     * We save the data and cancel the timer in this method.
+     */
+
     private void endGame() {
         SharedPreferences.Editor editor = getSharedPreferences(DataModel.Constants.SAVE_GAME_FILE, MODE_PRIVATE).edit();
         editor.clear();
@@ -134,6 +198,10 @@ public class GameBoard extends AppCompatActivity {
         String dateTime = DateFormat.getDateInstance(DateFormat.SHORT).format(new java.util.Date());
         dataModel.saveGameScore(this.getSharedPreferences(DataModel.Constants.PAST_GAMES_FILE, MODE_PRIVATE), totalScore, dateTime);
     }
+
+    /**
+     * This method is called whenever this activity comes into the view.
+     */
 
     @Override
     protected void onResume() {
@@ -149,7 +217,14 @@ public class GameBoard extends AppCompatActivity {
             countDownTimerMilliSeconds = t;
         }
         setTitle(gameModel.getSelectedMode() + " Game");
+        // Initializing the timer.
         countDownTimer = new CountDownTimer(countDownTimerMilliSeconds, 1000) {
+
+            /**
+             * Called after every 1 second (countDownTimerMilliSeconds).
+             * @param l
+             */
+
             @Override
             public void onTick(long l) {
                 long second = (l / 1000) % 60;
@@ -160,8 +235,12 @@ public class GameBoard extends AppCompatActivity {
                     timer.setText(minutes + ":" + second);
                 }
                 remainingTime = l;
-                dataModel.SaveCurrentState(getSharedPreferences(DataModel.Constants.SAVE_GAME_FILE, MODE_PRIVATE), totalScore, remainingTime, gameModel.getSelectedMode());
+                dataModel.saveCurrentState(getSharedPreferences(DataModel.Constants.SAVE_GAME_FILE, MODE_PRIVATE), totalScore, remainingTime, gameModel.getSelectedMode());
             }
+
+            /**
+             * Called when the timer ends
+             */
 
             @Override
             public void onFinish() {
@@ -169,6 +248,7 @@ public class GameBoard extends AppCompatActivity {
                 showMessage("Congratulations!");
             }
         };
+        // Starting the timer.
         countDownTimer.start();
         setNewQuestion();
     }
